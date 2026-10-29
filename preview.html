@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-p3r>
+<head>
+<meta charset="utf-8">
+<title>P3R 午夜蓝主题 · 预览</title>
+<style>
+/* ---- tokens: light defaults, dark overrides ---------------------------- */
+:root {
+  --bg-base: rgba(215, 230, 249, 0.32);
+  --bg-1: #ffffff;
+  --bg-2: #cfdff6;
+  --bg-3: #c2d5f0;
+  --border-l1: rgba(11, 42, 92, 0.13);
+  --border-l2: rgba(11, 42, 92, 0.24);
+  --border-l4: rgba(11, 42, 92, 0.40);
+  --brand: #1350c8;
+  --label-1: #06152e;
+  --label-2: #4a6790;
+  --label-3: #66809f;
+  --deep: #0b62c8;
+  --sidebar: rgba(204, 221, 244, 0.40);
+  --bubble: #f6faff;
+  --hover: rgba(19, 80, 200, 0.07);
+  --active: rgba(19, 80, 200, 0.10);
+  --p3-cyan: #0b62c8;
+  --p3-hud: rgba(19, 80, 200, 0.50);
+  --p3-line: rgba(11, 42, 92, 0.18);
+  --water-filter: blur(2.5px) saturate(1.05) contrast(0.86) brightness(1.00);
+  --water-opacity: 0.96;
+  --veil: radial-gradient(160% 90% at 50% -15%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 62%), linear-gradient(90deg, rgba(250,253,255,0.50) 0%, rgba(250,253,255,0.26) 150px, rgba(250,253,255,0) 280px), linear-gradient(180deg, rgba(203,226,253,0.30) 0%, rgba(186,213,250,0.28) 100%);
+  --scene: radial-gradient(120% 120% at 50% 0%, #ffffff 0%, #eef4fd 55%, #dde9fa 100%);
+  --menu-bg: rgba(255, 255, 255, 0.98);
+  --mark: rgba(19, 80, 200, 0.40);
+  --code-bg: #e9f1fc;
+}
+body[data-ds-dark-theme] {
+  --bg-base: rgba(10, 22, 46, 0.24);
+  --bg-1: rgba(12, 25, 52, 0.42);
+  --bg-2: #0c1a38;
+  --bg-3: #12244a;
+  --border-l1: rgba(120, 180, 255, 0.16);
+  --border-l2: rgba(120, 180, 255, 0.28);
+  --border-l4: rgba(120, 180, 255, 0.48);
+  --brand: #3c86ff;
+  --label-1: #e9f2ff;
+  --label-2: #9db6d8;
+  --label-3: #829cbe;
+  --deep: #6fe4ff;
+  --sidebar: rgba(8, 18, 40, 0.30);
+  --bubble: #f6faff;
+  --hover: rgba(60, 134, 255, 0.10);
+  --active: rgba(60, 134, 255, 0.16);
+  --p3-cyan: #6fe4ff;
+  --p3-hud: rgba(150, 215, 255, 0.70);
+  --p3-line: rgba(120, 180, 255, 0.22);
+  --water-filter: blur(2.5px) saturate(1.10) contrast(1.00) brightness(0.90);
+  --water-opacity: 1;
+  --veil: radial-gradient(160% 90% at 50% -15%, rgba(40,110,220,0.16) 0%, rgba(6,14,32,0) 58%), linear-gradient(90deg, rgba(9,26,68,0.72) 0%, rgba(9,26,68,0.30) 150px, rgba(9,26,68,0) 260px), linear-gradient(180deg, rgba(6,16,40,0.50) 0%, rgba(6,16,40,0.26) 78px, rgba(6,16,42,0.30) 55%, rgba(5,14,38,0.42) 100%);
+  --scene: radial-gradient(120% 120% at 50% 0%, #1c4a8e 0%, #0b1a35 58%, #050c1a 100%);
+  --menu-bg: rgba(7, 15, 33, 0.94);
+  --mark: rgba(190, 225, 255, 0.55);
+  --code-bg: rgba(6, 14, 34, 0.92);
+}
+
+* { box-sizing: border-box; }
+html { background: #071022; background-image: var(--scene); background-attachment: fixed; }
+body {
+  margin: 0; min-height: 100vh; color: var(--label-1); background: transparent;
+  font-family: "Bahnschrift", "DIN Alternate", "MiSans", "HarmonyOS Sans SC", "Noto Sans SC",
+    "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-variation-settings: normal;
+  font-size: 14px; line-height: 1.7; font-feature-settings: "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Once the chrome is down to 20%, type sits on moving water: one soft shadow
+   keeps the hairline labels legible without putting a fill back on the panel. */
+body[data-ds-dark-theme] { text-shadow: 0 1px 2px rgba(1, 6, 20, 0.55); }
+body[data-ds-dark-theme] .bubble { text-shadow: none; }
+
+/* ---- the scene: water + veil + clock ---------------------------------- */
+.water { position: fixed; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover;
+  filter: var(--water-filter); transform: scale(1.045); opacity: var(--water-opacity); pointer-events: none;
+  animation: water-drift 54s ease-in-out infinite alternate; }
+/* the GIF already loops; the drift keeps the 400x225 plate from reading as a
+   still backdrop and gives the panel edges something to move against */
+@keyframes water-drift {
+  from { translate: 0.6% 0.4%; scale: 1.01; }
+  to   { translate: -1.2% -0.8%; scale: 1.06; }
+}
+/* the frame: four corner brackets, the same language as the composer card */
+.frame {
+  position: fixed; inset: 9px; z-index: 2147483000; pointer-events: none; opacity: 0.5;
+  background-image: linear-gradient(var(--p3-cyan),var(--p3-cyan)), linear-gradient(var(--p3-cyan),var(--p3-cyan)),
+    linear-gradient(var(--p3-cyan),var(--p3-cyan)), linear-gradient(var(--p3-cyan),var(--p3-cyan)),
+    linear-gradient(var(--p3-cyan),var(--p3-cyan)), linear-gradient(var(--p3-cyan),var(--p3-cyan)),
+    linear-gradient(var(--p3-cyan),var(--p3-cyan)), linear-gradient(var(--p3-cyan),var(--p3-cyan));
+  background-size: 30px 1px, 1px 30px, 30px 1px, 1px 30px, 30px 1px, 1px 30px, 30px 1px, 1px 30px;
+  background-position: 0 0, 0 0, 100% 0, 100% 0, 0 100%, 0 100%, 100% 100%, 100% 100%;
+  background-repeat: no-repeat;
+}
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--veil); }
+/* the time scale along the bottom edge: a HUD ruler, masked clear of the
+   composer so it frames the frame instead of crowding the input */
+body::after {
+  content: ""; position: fixed; left: 0; right: 0; bottom: 0; height: 7px; z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(90deg, var(--p3-hud) 0 1px, transparent 1px 13px);
+  opacity: 0.6;
+  -webkit-mask-image: linear-gradient(90deg, #000 0 24%, transparent 38% 62%, #000 76% 91%,
+    transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0 24%, transparent 38% 62%, #000 76% 91%,
+    transparent 100%);
+}
+
+html::before {
+  content: "00:00   MEMENTO MORI"; position: fixed; right: 20px; bottom: 20px; z-index: 99;
+  font-size: 10px; line-height: 1; font-weight: 500; letter-spacing: 0.46em; color: var(--mark); pointer-events: none;
+}
+html::after {
+  content: ""; position: fixed; top: 0; left: 0; right: 0; height: 1px; z-index: 100; pointer-events: none;
+  background-image: linear-gradient(90deg, transparent 0%, var(--p3-cyan) 6%, transparent 14%);
+  background-size: 240% 100%; background-repeat: no-repeat; opacity: 0.45; animation: scan 12s linear infinite;
+}
+@keyframes scan { from { background-position: -20% 0; } to { background-position: 110% 0; } }
+
+::selection { background: var(--brand); color: #fff; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(120,180,255,0.26); border: 2px solid transparent; background-clip: content-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--p3-cyan); background-clip: content-box; }
+
+/* ---- shell ------------------------------------------------------------ */
+.app { display: grid; grid-template-columns: 252px 1fr; height: 100vh; }
+
+aside {
+  background: var(--sidebar); border-right: 1px solid var(--border-l1);
+  display: flex; flex-direction: column; padding: 14px 10px; gap: 4px;
+  backdrop-filter: blur(2px);
+}
+.brand { display: flex; align-items: center; gap: 8px; padding: 4px 8px 12px; }
+.brand .mark { width: 22px; height: 22px; }
+.brand b { font-size: 13px; letter-spacing: 0.06em; font-weight: 700; }
+.brand span { font-size: 10px; color: var(--label-3); letter-spacing: 0.16em; }
+.new {
+  display: flex; align-items: center; gap: 7px; width: 100%; padding: 7px 10px; margin: 2px 0 10px;
+  background: var(--brand); color: #fff; border: 0; border-radius: 0; font-size: 12.5px; font-weight: 600;
+  letter-spacing: 0.04em; cursor: pointer; font-family: inherit;
+}
+.new:hover { background: var(--brand); filter: brightness(1.12); }
+.sec { font-size: 10px; letter-spacing: 0.2em; color: var(--deep); opacity: 0.8; padding: 10px 8px 4px; text-transform: uppercase; font-weight: 600; }
+.row {
+  position: relative; isolation: isolate;
+  display: flex; align-items: center; gap: 8px; padding: 6px 10px; font-size: 12.5px; color: var(--label-2);
+  border-radius: 0; cursor: pointer; transition: color .12s ease;
+}
+.row:hover, .row.on, .row.sel { color: var(--label-1); }
+
+/* ---- the selection plate: P3R's skewed slab --------------------------- */
+.row::before, .menu button::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  opacity: 0; transform: skewX(-13deg); transform-origin: 0 50%;
+  background: repeating-linear-gradient(100deg, rgba(255,255,255,.05) 0 1px, transparent 1px 6px),
+    linear-gradient(100deg, rgba(46,123,255,.88) 0%, rgba(46,123,255,.46) 48%, rgba(46,123,255,.16) 100%);
+  box-shadow: inset 0 0 0 1px rgba(111,228,255,.46), inset 3px 0 0 rgba(111,228,255,1), 0 0 14px rgba(46,123,255,.30);
+}
+.row:hover::before, .row.on::before, .row.sel::before,
+.menu button:hover::before, .menu button.sel::before {
+  opacity: 1;
+  animation: plate-in .16s cubic-bezier(.2,.8,.2,1) both, plate-sway 4.6s ease-in-out .16s infinite;
+}
+@keyframes plate-in { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes plate-sway { 0%, 100% { translate: 0 0; } 50% { translate: 5px 0; } }
+
+body:not([data-ds-dark-theme]) .row::before,
+body:not([data-ds-dark-theme]) .menu button::before {
+  background: linear-gradient(100deg, rgba(19,80,200,.38) 0%, rgba(19,80,200,.19) 52%, rgba(19,80,200,.05) 100%);
+  box-shadow: inset 0 0 0 1px rgba(19,80,200,.46), inset 3px 0 0 #1350c8, 0 0 14px rgba(19,80,200,.12);
+}
+
+/* ---- a model menu, to show the plate in its natural habitat ----------- */
+.modelsel { position: relative; }
+.menu {
+  position: absolute; right: 0; top: calc(100% + 9px); min-width: 184px; padding: 5px; z-index: 40;
+  display: flex; flex-direction: column; gap: 1px;
+  background: var(--menu-bg); border: 1px solid var(--border-l2);
+  box-shadow: 0 20px 48px rgba(0, 6, 18, .55);
+}
+.menu button {
+  position: relative; isolation: isolate;
+  border: 0; background: transparent; color: var(--label-2); font: inherit; font-size: 12.5px;
+  text-align: left; padding: 7px 12px; cursor: pointer; letter-spacing: .01em;
+}
+.menu button.sel { color: var(--label-1); }
+.menu .msep { height: 1px; background: var(--border-l1); margin: 4px 6px; }
+.menu button.danger { color: #ff8a9c; }
+.menu button.danger::before {
+  background: linear-gradient(100deg, rgba(255,110,133,.58) 0%, rgba(255,110,133,.22) 52%, rgba(255,110,133,.04) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255,110,133,.52), inset 3px 0 0 #ff6e85;
+}
+body:not([data-ds-dark-theme]) .menu button.danger { color: #c02b40; }
+.row .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.foot { margin-top: auto; font-size: 10px; color: var(--label-3); letter-spacing: 0.12em; padding: 10px 8px 2px; }
+
+main { display: flex; flex-direction: column; min-width: 0; background: var(--bg-base); }
+header {
+  display: flex; align-items: center; justify-content: space-between; padding: 12px 26px;
+  border-bottom: 1px solid var(--border-l2); background: var(--bg-base);
+}
+header h1 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.chip {
+  font-size: 11px; color: var(--label-2); border: 1px solid var(--border-l2); padding: 2px 9px;
+  border-radius: 2px; letter-spacing: 0.08em;
+}
+.thread { flex: 1; overflow: auto; padding: 26px 26px 8px; }
+.col { max-width: 720px; margin: 0 auto; }
+
+.msg { margin-bottom: 22px; }
+/* the real theme lifts each message in; the preview stays settled so a
+   screenshot always shows the finished state */
+
+.speaker { font-size: 10.5px; letter-spacing: 0.22em; color: var(--label-2); margin-bottom: 7px; text-transform: uppercase; font-weight: 600; }
+.speaker::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--p3-cyan); vertical-align: middle; margin-right: 7px; opacity: 0.9; }
+/* the protagonist's line: white box, blue ink, blue border */
+.user .bubble {
+  background: var(--bubble); color: #0b3fa8; padding: 12px 16px; border-radius: 0;
+  border: 1px solid #2e7bff; font-weight: 500; letter-spacing: .01em;
+  box-shadow: inset 3px 0 0 #2e7bff, 0 8px 22px rgba(2,10,30,.26);
+}
+
+/* the other party: deep blue box, white ink */
+.assistant .box {
+  background: linear-gradient(158deg, #1d54cc 0%, #123a91 100%);
+  color: #f4f9ff; border: 1px solid rgba(111,228,255,.42); padding: 15px 18px 16px;
+  box-shadow: inset 3px 0 0 var(--p3-cyan), 0 10px 26px rgba(1,8,24,.32);
+}
+.assistant .box p { margin: 0 0 10px; }
+.assistant .box b,
+.assistant .box strong { color: #fff; font-weight: 650; }
+.assistant .box a { color: #b6ebff; text-underline-offset: 3px; }
+.assistant .box ul { color: #dbe9ff; }
+.assistant .box li::marker { color: var(--p3-cyan); }
+.assistant .box pre {
+  background: rgba(2,8,24,.64); border-left-color: var(--p3-cyan); color: #dbeaff; margin-top: 12px;
+}
+.assistant .box pre .k { color: #9fe6ff; }
+/* the real theme clips the boxes in; the preview stays still so a screenshot
+   always shows the settled state */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+.assistant p { margin: 0 0 10px; }
+.assistant ul { margin: 0 0 12px; padding-left: 18px; }
+.assistant li { margin: 3px 0; }
+.assistant b { color: var(--label-1); font-weight: 650; }
+.assistant a { color: var(--brand); text-underline-offset: 3px; }
+
+pre {
+  margin: 12px 0 0; padding: 12px 14px; background: var(--code-bg); border-left: 2px solid var(--p3-cyan);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 12px; line-height: 1.65;
+  color: var(--label-2); overflow: auto; border-radius: 0;
+}
+pre .k { color: var(--deep); }
+
+/* ---- composer --------------------------------------------------------- */
+.composer { padding: 6px 26px 22px; }
+.card {
+  position: relative; max-width: 720px; margin: 0 auto; display: flex; align-items: flex-end; gap: 10px;
+  background: var(--bg-1); padding: 11px 12px 11px 15px; border-radius: 0;
+  box-shadow: 0 0 0 1px rgba(120,180,255,.20), 0 0 28px rgba(30,90,220,.10);
+}
+.card::after {
+  content: ""; position: absolute; inset: -1px; z-index: 3; pointer-events: none;
+  background-image: linear-gradient(var(--p3-cyan),var(--p3-cyan)), linear-gradient(var(--p3-cyan),var(--p3-cyan)),
+    linear-gradient(var(--p3-cyan),var(--p3-cyan)), linear-gradient(var(--p3-cyan),var(--p3-cyan)),
+    linear-gradient(var(--p3-cyan),var(--p3-cyan)), linear-gradient(var(--p3-cyan),var(--p3-cyan)),
+    linear-gradient(var(--p3-cyan),var(--p3-cyan)), linear-gradient(var(--p3-cyan),var(--p3-cyan));
+  background-size: 11px 1px, 1px 11px, 11px 1px, 1px 11px, 11px 1px, 1px 11px, 11px 1px, 1px 11px;
+  background-position: 0 0, 0 0, 100% 0, 100% 0, 0 100%, 0 100%, 100% 100%, 100% 100%;
+  background-repeat: no-repeat; opacity: .7;
+}
+.card textarea {
+  flex: 1; border: 0; outline: none; resize: none; background: transparent; color: var(--label-1);
+  font: inherit; line-height: 1.6; min-height: 24px; padding: 2px 0;
+}
+.card textarea::placeholder { color: var(--label-3); }
+body:not([data-ds-dark-theme]) .card { box-shadow: 0 0 0 1px rgba(11, 42, 92, 0.22), 0 6px 20px rgba(19, 60, 130, 0.06); }
+.send {
+  border: 0; background: var(--brand); color: #fff; width: 30px; height: 30px; border-radius: 0;
+  cursor: pointer; font-size: 15px; display: grid; place-items: center; flex: none;
+}
+.send:hover { filter: brightness(1.12); }
+
+/* ---- theme switch ----------------------------------------------------- */
+.switch {
+  display: flex; margin: 12px 8px 0; border: 1px solid var(--border-l2);
+  background: var(--bg-1); overflow: hidden;
+}
+.switch button {
+  border: 0; background: transparent; color: var(--label-2); font: inherit; font-size: 10.5px;
+  letter-spacing: 0.14em; padding: 5px 11px; cursor: pointer; text-transform: uppercase;
+}
+.switch button.on { background: var(--brand); color: #fff; }
+</style>
+</head>
+<body data-p3r data-ds-dark-theme>
+<img class="water" src="li.gif" alt="">
+<div class="frame" aria-hidden="true"></div>
+
+<div class="app">
+  <aside>
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 512 512" aria-hidden="true">
+        <circle cx="256" cy="256" r="176" fill="none" stroke="#2e7bff" stroke-opacity=".45" stroke-width="14"/>
+        <g fill="#eaf4ff"><rect x="186" y="172" width="28" height="168"/><rect x="242" y="172" width="28" height="168"/><rect x="298" y="172" width="28" height="168"/></g>
+        <rect x="186" y="360" width="140" height="12" fill="#6fe4ff"/>
+      </svg>
+      <div><b>DEEPSEEK HARNESS</b><br><span>P3R THEME</span></div>
+    </div>
+
+    <button class="new">＋ 新建对话</button>
+
+    <div class="sec">今天</div>
+    <div class="row on"><span class="t">把背景调暗一点</span></div>
+    <div class="row"><span class="t">重构 schedule 模块</span></div>
+    <div class="row"><span class="t">整理这周的实验记录</span></div>
+
+    <div class="sec">更早</div>
+    <div class="row"><span class="t">P5R 主题的图标导出</span></div>
+    <div class="row"><span class="t">dsh 插件打包流程</span></div>
+
+    <div class="switch">
+      <button data-mode="dark" class="on">Dark hour</button>
+      <button data-mode="light">Daylight</button>
+    </div>
+    <div class="foot">v0.4.0 · DEEP WATER</div>
+  </aside>
+
+  <main>
+    <header>
+      <h1>把背景调暗一点</h1>
+      <div class="modelsel">
+        <button class="chip">V4.1 Flash ▾</button>
+        <div class="menu" role="menu">
+          <button role="menuitem">V4.1 Flash</button>
+          <button role="menuitem" class="sel">V4.1 Pro</button>
+          <button role="menuitem">R1 推理</button>
+          <div class="msep"></div>
+          <button role="menuitem" class="danger">清空上下文</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="thread">
+      <div class="col">
+        <div class="msg user">
+          <div class="speaker">你</div>
+          <div class="bubble">背景的 gif 挺好看的，但正文字有点压不住。能不能让它只做气氛，别抢读？</div>
+        </div>
+
+        <div class="msg assistant">
+          <div class="speaker">Assistant</div>
+          <div class="box">
+            <p>可以。做法是把它当成“水面”而不是“壁纸”：图像先模糊一层，再压一道渐变遮罩，最上面的面板只留一点透明，于是水只在对的地方透出来。</p>
+            <ul>
+              <li>模糊遮掉 400×225 放大后的颗粒</li>
+              <li>遮罩把顶部压亮、底部压暗，视线自然落在中段</li>
+              <li>面板只留 <b>24% 不透明度</b>，水在底色里走，字在板上读</li>
+              <li>选中的行不是变色，而是一块 <b>斜切蓝板</b>滑进来</li>
+              <li>对话框照游戏来：<b>你的白底蓝字</b>，<b>它蓝底白字</b></li>
+            </ul>
+            <pre><span class="k">.water</span> { filter: blur(2.5px) brightness(.9); opacity: 1; }
+<span class="k">body</span>::before { background: navy tint, .26 → .42; }
+<span class="k">--dsw-alias-bg-base</span>: rgba(10, 22, 46, <span class="k">0.24</span>);</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="composer">
+      <div class="card">
+        <textarea rows="1" placeholder="输入消息，Enter 发送…"></textarea>
+        <button class="send">↑</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  var buttons = document.querySelectorAll('.switch button');
+  function setMode(dark) {
+    document.body.toggleAttribute('data-ds-dark-theme', dark);
+    buttons.forEach(function (x) { x.classList.toggle('on', (x.dataset.mode === 'dark') === dark); });
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { setMode(b.dataset.mode === 'dark'); });
+  });
+  /* preview.html?mode=light opens straight in the daylight edition */
+  if (new URLSearchParams(location.search).get('mode') === 'light') setMode(false);
+</script>
+</body>
+</html>

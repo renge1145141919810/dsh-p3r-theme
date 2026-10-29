@@ -1,0 +1,9 @@
+node_modules/
+# the user's own background art: not redistributed, regenerate with `npm run media`
+*.log
+.DS_Store
+# keep the generated preview screenshot out of the repo
+preview-*.png
+
+# workbuddy workspace state
+.workbuddy/

@@ -1,0 +1,61 @@
+{
+  "name": "dsh-theme-p3r",
+  "version": "0.4.0",
+  "private": false,
+  "type": "module",
+  "description": "Persona 3 Reload 风格的 DeepSeek Harness 主题：午夜蓝、电光青、斜切蓝板选中框、HUD 时间刻度，以及白底蓝字 / 蓝底白字的对话框。",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "theme",
+    "persona",
+    "p3r",
+    "client"
+  ],
+  "license": "MIT",
+  "author": "renge1145141919810",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renge1145141919810/dsh-p3r-theme.git"
+  },
+  "homepage": "https://github.com/renge1145141919810/dsh-p3r-theme#readme",
+  "bugs": {
+    "url": "https://github.com/renge1145141919810/dsh-p3r-theme/issues"
+  },
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-theme"
+      ]
+    }
+  },
+  "engines": {
+    "node": ">=18",
+    "dsh": "^0.2.0"
+  },
+  "scripts": {
+    "media": "node tools/sync-media.mjs"
+  }
+}

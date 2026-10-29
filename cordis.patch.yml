@@ -1,0 +1,8 @@
+# dsh-theme-p3r bundle patch
+#
+# Installing this package as a bundle adds one plugin row. Both halves are
+# intentionally thin: the whole theme lives in the Client half (client.js),
+# which overrides the --dsw-* alias tokens and injects one scoped stylesheet.
+- insert:
+    - id: theme-p3r
+      name: 'dsh-theme-p3r'
